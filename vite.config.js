@@ -1,10 +1,8 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import basicSsl from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig({
     plugins: [
-        basicSsl(),
         laravel({
             input: [
                 'resources/css/app.css',
@@ -13,4 +11,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: true,
+        hmr: {
+            host: 'https://hotel-booking-production-2637.up.railway.app'
+        }
+    },
 });
