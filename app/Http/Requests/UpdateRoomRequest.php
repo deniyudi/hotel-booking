@@ -26,6 +26,8 @@ class UpdateRoomRequest extends FormRequest
             'photo' => ['sometimes', 'image', 'mimes:jpeg,png,jpg'],
             'total_people' => ['required', 'integer'],
             'price' => ['required', 'integer'],
+            'facilities' => ['required', 'array'],
+            'facilities.*' => ['exists:hotel_facilities,id', 'distinct'],
         ];
     }
 }

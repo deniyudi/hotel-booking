@@ -22,8 +22,7 @@
           <a href="{{ route('frontend.hotels.details', $hotel) }}">
             <div class="card-result bg-white rounded-xl overflow-hidden flex flex-col">
               <div class="thumbnail-container w-full aspect-[357/160] overflow-hidden flex shrink-0">
-                <img src="{{ asset('assets/images/thumbnails/thumbnail-result-1.png') }}"
-                  class="object-cover w-full h-full" alt="thumbnail">
+                <img src="{{ $hotel->thumbnail }}" class="object-cover w-full h-full" alt="thumbnail">
               </div>
               <div class="content-container flex flex-col p-4 gap-6">
                 <div class="details-container flex flex-col gap-[6px]">

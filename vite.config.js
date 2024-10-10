@@ -11,10 +11,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    server: {
-        host: true,
-        hmr: {
-            host: 'https://hotel-booking-production-2637.up.railway.app'
-        }
-    },
+    // server: {
+    //     host: true,
+    //     hmr: {
+    //         host: 'https://hotel-booking-production-2637.up.railway.app'
+    //     }
+    // },
 });

@@ -30,15 +30,15 @@
               {{ __('Hotels') }}
             </x-nav-link>
           @endcan
-          @can('manage bookings')
-          <x-nav-link :href="route('admin.hotel_bookings.index')" :active="request()->routeIs('admin.hotel_bookings.index')">
-            {{ __('Hotels Bookings') }}
-          </x-nav-link>
+          @can('manage hotel facilities')
+            <x-nav-link :href="route('admin.hotel_facilities.index')" :active="request()->routeIs('admin.hotel_facilities.index')">
+              {{ __('Hotel Facilities') }}
+            </x-nav-link>
           @endcan
-          @can('view hotel bookings')
-          <x-nav-link :href="route('admin.hotel_bookings.index')" :active="request()->routeIs('admin.hotel_bookings.index')">
-            {{ __('My Bookings') }}
-          </x-nav-link>
+          @can('manage bookings')
+            <x-nav-link :href="route('admin.hotel_bookings.index')" :active="request()->routeIs('admin.hotel_bookings.index')">
+              {{ __('Hotels Bookings') }}
+            </x-nav-link>
           @endcan
         </div>
       </div>

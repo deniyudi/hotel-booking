@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Hotel;
+use App\Models\HotelFacility;
 use App\Models\HotelRoom;
+use Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class HotelRoomController extends Controller
 {
@@ -24,7 +27,8 @@ class HotelRoomController extends Controller
      */
     public function create(Hotel $hotel)
     {
-        return view('admin.hotel_rooms.create', compact('hotel'));
+        $facilities = HotelFacility::all();
+        return view('admin.hotel_rooms.create', compact('hotel', 'facilities'));
     }
 
     /**
@@ -37,17 +41,21 @@ class HotelRoomController extends Controller
         DB::transaction(function () use ($request, $hotel) {
             $validated = $request->validated();
 
-            if ($request->hasFile('photo')) {
-                $photoPath =
-                    $request->file('photo')->store('photos/' . date("Y/m/d"), 'public');
-                $validated['photo'] = $photoPath;
-            }
+            $photo = $request->file('photo');
+            $photoPath = 'hotel/rooms';
+            $uploadPhoto = Helper::uploadToCloudinary($photo, $photoPath);
+            $validated['photo'] = $uploadPhoto;
 
             $validated['hotel_id'] = $hotel->id; //tambahan array validasi, dapet dari param controller
+            $validated['slug'] = Str::slug($validated['name']);
             $room = HotelRoom::create($validated);
+
+            if ($request->has('facilities')) {
+                $room->facilities()->attach($request->facilities); // Pastikan 'facilities' adalah array dari ID fasilitas
+            }
         });
 
-        return redirect()->route('admin.hotels.show', $hotel->id);
+        return redirect()->route('admin.hotels.show', $hotel->slug);
     }
 
     /**
@@ -64,7 +72,8 @@ class HotelRoomController extends Controller
     public function edit(Hotel $hotel, HotelRoom $hotelRoom)
     {
         // dd($hotelRoom);
-        return view('admin.hotel_rooms.edit', compact('hotel', 'hotelRoom'));
+        $facilities = HotelFacility::all();
+        return view('admin.hotel_rooms.edit', compact('hotel', 'hotelRoom', 'facilities'));
     }
 
     /**
@@ -80,11 +89,28 @@ class HotelRoomController extends Controller
                     $request->file('photo')->store('photos/' . date("Y/m/d"), 'public');
                 $validated['photo'] = $photoPath;
             }
+            if ($request->hasFile('photo')) {
+                $namePath = 'hotel/rooms';
+
+                $newPhotoUrl = Helper::updateCloudinaryFile($request->file('photo'), $hotelRoom->photo, $namePath);
+
+                $validated['photo'] = $newPhotoUrl;
+            }
+
+            $validated['slug'] = Str::slug($validated['name']);
 
             $hotelRoom->update($validated);
+
+            if ($request->has('facilities')) {
+                // Sync facilities, if you are using a many-to-many relationship
+                $hotelRoom->facilities()->sync($request->facilities);
+            } else {
+                // Clear existing facilities if none selected
+                $hotelRoom->facilities()->sync([]);
+            }
         });
 
-        return redirect()->route('admin.hotels.show', $hotelRoom->hotel_id);
+        return redirect()->route('admin.hotels.show', $hotelRoom->hotel->slug);
     }
 
     /**

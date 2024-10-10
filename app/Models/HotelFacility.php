@@ -6,18 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class City extends Model
+class HotelFacility extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
-        'slug',
-        'photo'
+        'icon',
+        'description',
     ];
 
-    public function hotels()
+    public function rooms()
     {
-        return $this->hasMany(Hotel::class);
+        return $this->belongsToMany(HotelRoom::class, 'many_hotel_facility', 'hotel_facility_id', 'hotel_room_id');
     }
 }

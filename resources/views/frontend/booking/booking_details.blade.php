@@ -7,7 +7,7 @@
     </div>
     <div class="relative z-10 flex flex-col gap-6 mt-[60px]">
       <div class="top-menu flex justify-between items-center px-[18px]">
-        <a href="{{ url()->previous() }}" class="">
+        <a href="{{ route('frontend.my-bookings') }}" class="">
           <div class="w-[42px] h-[42px] flex shrink-0">
             <img src="{{ asset('assets//images/icons/back.svg') }}" alt="icon">
           </div>
@@ -36,8 +36,8 @@
             <hr class="border-[#DCDFE6]">
             <div id="Hotel-details" class="flex flex-col p-4 gap-4">
               <div class="flex items-center gap-3">
-                <div class="w-[72px] h-[72px] flex shrink-0 rounded-lg overflow-hidden">
-                  <img src="{{ Storage::url($hotelBooking->room->photo) }}" class="object-cover w-full h-full"
+                <div class="w-[120px] h-[72px] flex shrink-0 rounded-lg overflow-hidden">
+                  <img src="{{ $hotelBooking->room->photo }}" class="object-cover w-full h-full"
                     alt="thumbnail">
                 </div>
                 <div class="flex flex-col gap-[2px]">
@@ -46,7 +46,7 @@
                     {{ $hotelBooking->checkout_at->format('M d') }}
                     ({{ $hotelBooking->total_days }} Night)</p>
                   </p>
-                  <p class="font-semibold line-clamp-1">{{ $hotelBooking->hotel->name }}</p>
+                  <p class="font-semibold line-clamp-1">{{ $hotelBooking->room->name }}</p>
                   <div class="flex items-center gap-1">
                     <div class="flex shrink-0">
                       <img src="{{ asset('assets//images/icons/location-grey.svg') }}" alt="icon">
@@ -56,45 +56,40 @@
                   </div>
                 </div>
               </div>
-              <div class="facilities-info rounded-xl border border-[#DCDFE6] overflow-hidden">
-                <div class="flex flex-col gap-4 p-4 pb-0 mb-4">
-                  <div class="flex items-center justify-between">
-                    <div class="title-container flex flex-col gap-[2px]">
-                      <p class="font-semibold">{{ $hotelBooking->room->name }}</p>
-                      <p class="font-medium text-sm leading-[21px] text-[#757C98]">Max.
-                        {{ $hotelBooking->room->total_people }} Adult /Room</p>
-                    </div>
-                    <a href="{{ route('frontend.hotels.details', $hotelBooking->hotel->slug) }}"
-                      class="font-semibold text-sm leading-[21px] text-[#4041DA]">Details</a>
-                  </div>
-                  <hr>
-                  <div class="flex items-center gap-1">
-                    <div class="flex shrink-0">
-                      <img src="{{ asset('assets//images/icons/wifi-square-grey.svg') }}" alt="icon">
-                    </div>
-                    <p class="font-medium text-sm leading-[21px] text-[#757C98]">Free Wi-Fi</p>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <div class="flex shrink-0">
-                      <img src="{{ asset('assets//images/icons/coffee-grey.svg') }}" alt="icon">
-                    </div>
-                    <p class="font-medium text-sm leading-[21px] text-[#757C98]">Coffee & Tea</p>
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <div class="flex shrink-0">
-                      <img src="{{ asset('assets//images/icons/wind-grey.svg') }}" alt="icon">
-                    </div>
-                    <p class="font-medium text-sm leading-[21px] text-[#757C98]">Air Conditions</p>
-                  </div>
-                </div>
-                <div class="w-full bg-[#F93F6C] p-[10px]">
-                  <p class="text-center font-semibold text-xs leading-[18px] text-white">Refund & Reschedule not allowed
-                  </p>
-                </div>
+            </div>
+            <div class="flex px-4 mb-4 items-center justify-between">
+              <div class="title-container flex flex-col gap-[2px]">
+                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Total Amount : </p>
               </div>
-              <div class="flex items-center justify-between">
-                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Guest Name:</p>
+              <p class="font-semibold text-lg">Rp
+                {{ number_format($hotelBooking->total_amount, 0, ',', '.') }}
+              </p>
+            </div>
+            <hr class="border-[#DCDFE6]">
+            <div class="flex flex-col p-4 gap-3">
+              <div class="flex flex-col">
+                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Hotel :</p>
+                <p class="font-semibold">{{ $hotelBooking->hotel->name }}</p>
+              </div>
+              <div class="flex flex-col">
+                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Room Capacity :</p>
+                <p class="font-semibold">Max.
+                  {{ $hotelBooking->room->total_people }} Adult /Room</p>
+              </div>
+              <div class="flex flex-col">
+                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Guest Name :</p>
                 <p class="font-semibold">{{ ucfirst($hotelBooking->customer->name) }}</p>
+              </div>
+              <div class="flex flex-col">
+                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Email :</p>
+                <p class="font-semibold">{{ $hotelBooking->customer->email }}</p>
+              </div>
+              <div class="flex flex-col">
+                <p class="font-medium text-sm leading-[21px] text-[#757C98]">Proof of payment :</p>
+                <a href="{{ $hotelBooking->proof }}" class="glightbox overflow-hidden"
+                  data-gallery="gallery1" style="width: 100px; height: 150px;">
+                  <img src="{{ $hotelBooking->proof}}" class="object-cover w-full h-full" alt="thumbnail">
+                </a>
               </div>
             </div>
             <hr class="border-[#DCDFE6]">
@@ -130,10 +125,10 @@
         </div>
         <div id="Bottom-nav"
           class="fixed bottom-0 w-full max-w-[640px] flex flex-col p-[24px_18px] border-t border-[#DCDFE6] gap-4 bg-white">
-          <a href=""
+          <a href="https://api.whatsapp.com/send/?phone=6281359131564&text&type=phone_number&app_absent=0"
             class="flex items-center justify-center font-semibold p-[12px_24px] rounded-lg w-full h-12 bg-[#4041DA] text-white">Contact
             Customer Service</a>
-          <a href="home-login.html"
+          <a href="{{ route('frontend.index') }}"
             class="flex items-center justify-center font-semibold p-[12px_24px] rounded-lg w-full h-12 bg-[#4041DA17] text-[#4041DA]">Back
             to Homepage</a>
         </div>

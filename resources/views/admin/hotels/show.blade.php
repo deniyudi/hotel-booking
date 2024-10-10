@@ -14,8 +14,7 @@
 
         <div class="item-card flex flex-row justify-between items-center">
           <div class="flex flex-row items-center gap-x-3">
-            <img src="{{ Storage::url($hotel->thumbnail) }}" alt=""
-              class="rounded-2xl object-cover w-[120px] h-[90px]">
+            <img src="{{ $hotel->thumbnail }}" alt="" class="rounded-2xl object-cover w-[120px] h-[90px]">
             <div class="flex flex-col">
               <h3 class="text-indigo-950 text-xl font-bold">
                 {{ $hotel->name }}
@@ -58,8 +57,7 @@
         <div class="flex flex-row gap-x-5">
 
           @foreach ($latestPhotos as $photo)
-            <img src="{{ Storage::url($photo->photo) }}" alt=""
-              class="rounded-2xl object-cover w-[120px] h-[90px]">
+            <img src="{{ $photo->photo }}" alt="" class="rounded-2xl object-cover w-[120px] h-[90px]">
           @endforeach
         </div>
 
@@ -84,7 +82,7 @@
         @forelse ($hotel->rooms as $room)
           <div class="item-card flex flex-row justify-between items-center">
             <div class="flex flex-row items-center gap-x-3">
-              <img src="{{ Storage::url($room->photo) }}" alt=""
+              <img src="{{ $room->photo }}" alt=""
                 class="rounded-2xl object-cover w-[120px] h-[90px]">
               <div class="flex flex-col">
                 <h3 class="text-indigo-950 text-xl font-bold">

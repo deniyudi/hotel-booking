@@ -10,7 +10,10 @@ class HotelBooking extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public $incrementing = false;
+
     protected $fillable = [
+        'id',
         'user_id',
         'hotel_id',
         'hotel_room_id',

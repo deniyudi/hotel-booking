@@ -35,7 +35,7 @@
 
         if (seconds < 0) {
           // Redirect after countdown
-          window.location.href = "{{ route('dashboard.my-bookings') }}";
+          window.location.href = "{{ route('frontend.my-bookings') }}";
         } else {
           setTimeout(updateCountdown, 1000); // Update every second
         }

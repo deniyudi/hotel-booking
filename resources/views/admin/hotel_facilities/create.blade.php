@@ -1,14 +1,14 @@
 <x-app-layout>
   <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      {{ __('New Cities') }}
+      {{ __('New Hotel Facility') }}
     </h2>
   </x-slot>
 
   <div class="py-12">
     <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden p-10 shadow-sm sm:rounded-lg">
-        <form method="POST" action="{{ route('admin.cities.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('admin.hotel_facilities.store') }}" enctype="multipart/form-data">
           @csrf
           <div>
             <x-input-label for="name" :value="__('Name')" />
@@ -16,18 +16,23 @@
               required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
           </div>
-
-          <div class="mt-4">
-            <x-input-label for="photo" :value="__('Photo')" />
-            <x-text-input id="photo" class="block mt-1 w-full" type="file" name="photo" required autofocus
-              autocomplete="photo" />
-            <x-input-error :messages="$errors->get('photo')" class="mt-2" />
+          <div>
+            <x-input-label for="description" :value="__('Description')" />
+            <x-text-input id="description" class="block mt-1 w-full" type="text" name="description" :value="old('description')"
+              required autofocus autocomplete="description" />
+            <x-input-error :messages="$errors->get('description')" class="mt-2" />
+          </div>
+          <div>
+            <x-input-label for="icon" :value="__('Icon')" />
+            <x-text-input id="icon" class="block mt-1 w-full" type="text" name="icon" :value="old('icon')"
+              required autofocus autocomplete="icon" />
+            <x-input-error :messages="$errors->get('icon')" class="mt-2" />
           </div>
 
           <div class="flex items-center justify-end mt-4">
 
             <button type="submit" class="font-bold py-4 px-6 bg-indigo-700 text-white rounded-full">
-              Add New City
+              Add New Facility
             </button>
           </div>
         </form>

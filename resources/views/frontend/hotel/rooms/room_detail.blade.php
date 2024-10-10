@@ -2,70 +2,66 @@
 
 @section('content')
   <section id="content"
-    class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[122px] relative">
-    <div id="Top-bar" class="absolute z-10 top-[60px] left-[18px]">
-      <a href="{{ url()->previous() }}" class="">
-        <div class="w-[42px] h-[42px] flex shrink-0">
-          <img src="{{ asset('assets/images/icons/back.svg') }}" alt="icon">
-        </div>
-      </a>
+    class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-white overflow-x-hidden pb-[122px] relative">
+    {{-- <div class="w-full h-[165px] absolute top-0 bg-[linear-gradient(244.6deg,_#7545FB_14.17%,_#2A3FCC_92.43%)]"> --}}
     </div>
-    <div id="Details-content" class="flex flex-col">
-      <header class="flex flex-col">
-        <div id="thumbnail-container" class="grid grid-cols-3 gap-[3px]">
-          <a id="Main-thumbnail" href="{{ Storage::url($hotel->thumbnail) }}"
-            class="col-span-3 glightbox w-full aspect-[393/247] overflow-hidden" data-gallery="gallery1">
-            <img src="{{ Storage::url($hotel->thumbnail) }}" class="object-cover w-full h-full" alt="thumbnail">
-          </a>
-
-          @foreach ($latestPhotos as $photo)
-            <a href="{{ Storage::url($photo->photo) }}" class="glightbox w-full aspect-[129/90] overflow-hidden"
-              data-gallery="gallery1">
-              <img src="{{ Storage::url($photo->photo) }}" class="object-cover w-full h-full" alt="thumbnail">
-            </a>
-          @endforeach
+    <div class="relative z-10 px-[18px] flex flex-col gap-6 mt-[60px]">
+      <div class="top-menu flex justify-between items-center">
+        <a href="{{ route('frontend.hotels.rooms', $hotel_room->hotel->slug) }}" class="bg-blue-500">
+          <div class="w-[42px] h-[42px] flex shrink-0">
+            <img src="{{ asset('assets/images/icons/back.svg') }}" alt="icon">
+          </div>
+        </a>
+        <p class="font-semibold text-lg leading-[28px] text-center">Room Details</p>
+        <div class="dummy-spacer w-[42px] h-[42px] flex shrink-0">
         </div>
-        <div id="Hotel-info" class="bg-white p-[24px_18px] flex flex-col gap-2">
-          <div id="Hotel-rating" class="flex items-center gap-[6px]">
-            <div
-              class="badge rounded-md p-[6px_12px] gap-[2px] bg-[linear-gradient(244.6deg,_#7545FB_14.17%,_#2A3FCC_92.43%)] text-[#F8F8F8] font-semibold text-sm leading-[21px]">
-              {{ $hotel->star_level }} Star Hotel</div>
-            <div class="ratings-container flex items-center gap-1">
-              <div class="star-container flex items-center">
-                <div class="flex shrink-0 w-[18px] h-[18px] p-[2px]">
-                  <img src="{{ asset('assets/images/icons/Star.svg') }}" alt="star">
+      </div>
+
+      <div class="room-details flex flex-col gap-[18px]">
+        <div class="card-result bg-white overflow-hidden flex flex-col">
+          <div class="thumbnail-container rounded-xl w-full aspect-[360/140] overflow-hidden flex shrink-0">
+            <img src="{{ $hotel_room->photo }}" class="object-cover w-full h-full" alt="thumbnail">
+          </div>
+          <div class="content-container flex flex-col gap-2">
+            <div class="details-container flex flex-col gap-[6px] ">
+              <div class="ratings-container flex items-center gap-[2px] mt-2">
+                <div class="star-container flex items-center">
+                  <div class="flex shrink-0 w-[18px] h-[18px] p-[2px]">
+                    <img src="{{ asset('assets/images/icons/Star.svg') }}" alt="star">
+                  </div>
                 </div>
-                <div class="flex shrink-0 w-[18px] h-[18px] p-[2px]">
-                  <img src="{{ asset('assets/images/icons/Star.svg') }}" alt="star">
+                <p class="rating font-medium text-sm leading-[21px]">4.5</p>
+                <p class="reviewers font-thin text-sm leading-[21px] text-[#757C98]">(2209)</p>
+              </div>
+              <p class="hotel-name font-medium">{{ $hotel_room->name }}</p>
+              <div class="badge flex items-center gap-3">
+                <div class="flex items-center gap-1">
+                  <div class="flex shrink-0">
+                    <img src="{{ asset('assets/images/icons/location-grey.svg') }}" alt="icon">
+                  </div>
+                  <p class="font-normal text-sm leading-[21px] text-[#757C98]">{{ $hotel_room->hotel->city->name }},
+                    {{ $hotel_room->hotel->country->name }}</p>
                 </div>
-                <div class="flex shrink-0 w-[18px] h-[18px] p-[2px]">
-                  <img src="{{ asset('assets/images/icons/Star.svg') }}" alt="star">
+                <div class="flex items-center gap-1">
+                  <div class="flex shrink-0">
+                    <img src="{{ asset('assets/images/icons/star-outline-grey.svg') }}" alt="icon">
+                  </div>
+                  <p class="font-normal text-sm leading-[21px] text-[#757C98]">{{ $hotel_room->star_level }} Star</p>
                 </div>
-                <div class="flex shrink-0 w-[18px] h-[18px] p-[2px]">
-                  <img src="{{ asset('assets/images/icons/Star.svg') }}" alt="star">
-                </div>
-                <div class="flex shrink-0 w-[18px] h-[18px] p-[2px]">
-                  <img src="{{ asset('assets/images/icons/Star-half.svg') }}" alt="star">
+                <div class="flex items-center gap-1">
+                  <div class="flex shrink-0">
+                    <img src="{{ asset('assets/images/icons/wifi-grey.svg') }}" alt="icon">
+                  </div>
+                  <p class="font-normal text-sm leading-[21px] text-[#757C98]">Free Wifi</p>
                 </div>
               </div>
-              <p class="rating font-semibold text-sm leading-[21px]">{{ $hotel->star_level }}/5</p>
-              <p class="reviewers font-medium text-sm leading-[21px] text-[#757C98]">(3214 Review)</p>
             </div>
-          </div>
-          <h1 id="Hotel-name" class="font-semibold text-2xl leading-[36px]">{{ $hotel->name }}</h1>
-          <div id="Hotel-Location" class="flex items-center gap-1">
-            <div class="flex shrink-0 w-6 h-6">
-              <img src="{{ asset('assets/images/icons/location-grey.svg') }}" alt="icon">
-            </div>
-            <p class="text-[#757C98] font-medium text-sm leading-[21px]">{{ $hotel->city->name }},
-              {{ $hotel->country->name }}</p>
           </div>
         </div>
-      </header>
-      <div id="Facilities" class="bg-white p-[24px_18px] flex flex-col gap-3 mt-2">
+      </div>
+      <div id="Facilities" class="bg-white flex flex-col gap-3">
         <div class="flex items-center justify-between">
-          <h2 class="font-semibold text-lg leading-[27px]">Popular Facilities</h2>
-          <a href="" class="font-semibold text-sm leading-[21px] text-[#4041DA]">See All</a>
+          <h2 class="font-medium"> Facilities</h2>
         </div>
         <div class="card-container grid grid-cols-2 gap-[18px]">
           <a href="" class="card-facilities">
@@ -114,9 +110,24 @@
           </a>
         </div>
       </div>
-      <div id="Testimonials" class="w-full overflow-hidden py-6 flex flex-col gap-3">
-        <div class="flex justify-between items-center px-[18px]">
-          <h2 class="font-semibold text-lg leading-[27px]">Our Happy Customer</h2>
+      <div id="Procedure" class="flex flex-col gap-3">
+        <div class="flex justify-between items-center">
+          <h2 class="font-medium">Procedure Check-In</h2>
+        </div>
+        <div class="grid grid-cols-2 gap-[13px]">
+          <div class="flex flex-col p-3 gap-1 rounded border border-[#EEEEEE]">
+            <p class="font-medium text-xs leading-[18px] text-[#757C98]">Check-In</p>
+            <p class="font-semibold">14:00 AM</p>
+          </div>
+          <div class="flex flex-col p-3 gap-1 rounded border border-[#EEEEEE] text-right">
+            <p class="font-medium text-xs leading-[18px] text-[#757C98]">Check-Out</p>
+            <p class="font-semibold">12:00 AM</p>
+          </div>
+        </div>
+      </div>
+      <div id="Testimonials" class="w-full overflow-hidden flex flex-col gap-3">
+        <div class="flex justify-between items-center">
+          <h2 class="font-medium">Our Happy Customer</h2>
           <a href="" class="font-semibold text-sm leading-[21px] text-[#4041DA]">See All</a>
         </div>
         <div class="main-carousel">
@@ -242,49 +253,62 @@
           </a>
         </div>
       </div>
-      <div id="Procedure" class="bg-white p-[24px_18px] flex flex-col gap-3">
-        <div class="flex justify-between items-center">
-          <h2 class="font-semibold text-lg leading-[27px]">Procedure Check-In</h2>
-        </div>
-        <div class="grid grid-cols-2 gap-[13px]">
-          <div class="flex flex-col p-3 gap-1 rounded border border-[#EEEEEE]">
-            <p class="font-medium text-xs leading-[18px] text-[#757C98]">Check-In</p>
-            <p class="font-semibold">14:00 AM</p>
-          </div>
-          <div class="flex flex-col p-3 gap-1 rounded border border-[#EEEEEE] text-right">
-            <p class="font-medium text-xs leading-[18px] text-[#757C98]">Check-Out</p>
-            <p class="font-semibold">12:00 AM</p>
-          </div>
-        </div>
-      </div>
-      <div id="Location" class="bg-white p-[24px_18px] flex flex-col gap-3 mt-2">
-        <div class="flex justify-between items-center">
-          <h2 class="font-semibold text-lg leading-[27px]">Location Details</h2>
-          <a id="map-link" href="" target="_blank"
-            class="font-semibold text-sm leading-[21px] text-[#4041DA]">See Map</a>
-        </div>
-        <div id="embed-map-display" class="w-full aspect-[357/180] overflow-hidden">
-          <iframe id="map-iframe" class="w-full h-full z-0" frameborder="0"
-            src="https://www.google.com/maps/embed/v1/place?q={{ $hotel->name }}&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"></iframe>
-        </div>
-        <p class="font-medium text-xs leading-[18px] text-[#757C98]">{{ $hotel->address }}</p>
-      </div>
     </div>
     <div id="Price-bar" class="fixed bottom-[24px] px-[18px] max-w-[640px] w-full z-30">
-      <div class="bg-white p-4 pl-6 rounded-full flex items-center justify-between shadow-[0_8px_30px_0_#0A093212]">
-        <div class="price-info flex flex-col gap-[2px]">
-          <p class="font-semibold text-lg leading-[27px] text-[#54A917]">Rp
-            {{ number_format($hotel->getLowestRoomPrice(), 0, ',', '.') }}</p>
-          <p class="font-semibold text-xs leading-[18px] text-[#757C98]">/night</p>
+      <div class="flex flex-col rounded-xl bg-white p-4 shadow-[0_8px_30px_0_#0A093212]">
+        <div class="grid grid-cols-2 gap-4 justify-between">
+          <div class="input-container flex flex-col  gap-2">
+            <p class="font-medium">Check-In</p>
+            <div
+              class="relative group flex items-center gap-2 p-[12px_16px] border border-[#DCDFE6] rounded-lg overflow-hidden">
+              <div class="size-auto flex shrink-0 group-has-[:invalid]:text-[#757C98]">
+                <i class="fa-regular fa-calendar fa-lg size-16"></i>
+              </div>
+              <button type="button"
+                class="checkInBtn w-full text-left text-sm text-[#757C98] !leading-[21px] font-medium relative z-10"
+                onclick="handleDateButtonClick('checkIn')">
+                dd/mm/yyyy
+              </button>
+              <input type="date" name="checkin_at" id="checkIn" class="opacity-0 absolute bottom-0" required>
+            </div>
+          </div>
+          <div class="input-container flex flex-col gap-2">
+            <p class="font-medium">Check-Out</p>
+            <div
+              class="relative group flex items-center gap-2 p-[12px_16px] border border-[#DCDFE6] rounded-lg overflow-hidden">
+              <div class="size-auto flex shrink-0 group-has-[:invalid]:text-[#757C98]">
+                <i class="fa-regular fa-calendar fa-lg size-16"></i>
+              </div>
+              <button type="button"
+                class="checkOutBtn w-full text-left text-sm text-[#757C98] !leading-[21px] font-medium relative z-10"
+                onclick="handleDateButtonClick('checkOut')">
+                dd/mm/yyyy
+              </button>
+              <input type="date" name="checkout_at" id="checkOut" class="opacity-0 absolute bottom-0" required>
+            </div>
+          </div>
         </div>
-        <a href="{{ route('frontend.hotels.rooms', $hotel->slug) }}"
-          class="w-[138px] h-[48px] bg-[#4041DA] p-[12px_24px] rounded-full text-nowrap text-white font-semibold text-sm leading-[21px] flex items-center justify-center">Select
-          Room</a>
+        <div class="bg-white mt-4 flex items-center justify-between ">
+          <div class=" items-center">
+            <p class="text-[#fff] font-medium leading-[18px]">Total</p>
+            <p class="total-price text-[#000] font-semibold text-lg leading-[27px]">
+              Rp {{ number_format($hotel_room->price, 0, ',', '.') }}
+            </p>
+          </div>
+          <form method="POST"
+            action="{{ route('frontend.hotel.room.book', ['hotel' => $hotel, 'hotel_room' => $hotel_room->slug]) }}">
+            @csrf
+            <input type="hidden" name="checkin_at" id="hiddenCheckIn">
+            <input type="hidden" name="checkout_at" id="hiddenCheckOut">
+            <button type="submit"
+              class="w-[138px] h-[48px] bg-[#4041DA] p-[12px_24px] rounded-full text-nowrap text-white font-semibold text-sm leading-[21px] flex items-center justify-center">
+              Booking
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </section>
-
-  <!-- JavaScript -->
 @endsection
 
 @push('after-styles')
@@ -295,10 +319,104 @@
 @push('after-scripts')
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
   <script src="{{ asset('js/hotel-details.js') }}"></script>
   <script src="{{ asset('js/carousel.js') }}"></script>
   <script src="{{ asset('js/map.js') }}"></script>
+  <script>
+    function setDefaultDates() {
+      const checkInInput = document.getElementById('checkIn');
+      const checkOutInput = document.getElementById('checkOut');
+
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+
+      const formatDate = (date) => date.toISOString().split('T')[0];
+
+      checkInInput.value = formatDate(today);
+      checkOutInput.value = formatDate(tomorrow);
+
+      updateButtonText(checkInInput);
+      updateButtonText(checkOutInput);
+    }
+
+    function updateButtonText(dateInput) {
+      const selectedDate = new Date(dateInput.value);
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+        "October", "November", "December"
+      ];
+      const formattedDate =
+        `${selectedDate.getDate()} ${monthNames[selectedDate.getMonth()]} ${selectedDate.getFullYear()}`;
+
+      dateInput.previousElementSibling.innerText = formattedDate;
+      dateInput.previousElementSibling.classList.remove('text-[#757C98]', 'font-medium');
+      dateInput.previousElementSibling.classList.add('font-semibold');
+    }
+
+    function updateHiddenFields() {
+      const checkInValue = document.getElementById('checkIn').value;
+      const checkOutValue = document.getElementById('checkOut').value;
+
+      document.getElementById('hiddenCheckIn').value = checkInValue;
+      document.getElementById('hiddenCheckOut').value = checkOutValue;
+    }
+
+    function handleDateButtonClick(inputId) {
+      const dateInput = document.getElementById(inputId);
+      dateInput.showPicker();
+
+      dateInput.addEventListener("change", () => {
+        updateButtonText(dateInput);
+        validateDates();
+        updateHiddenFields();
+        updateTotalPrice();
+      });
+    }
+
+    function validateDates() {
+      const checkInInput = document.getElementById('checkIn');
+      const checkOutInput = document.getElementById('checkOut');
+
+      const checkInDate = new Date(checkInInput.value);
+      const checkOutDate = new Date(checkOutInput.value);
+
+      if (checkInDate >= checkOutDate) {
+        const newCheckOutDate = new Date(checkInDate);
+        newCheckOutDate.setDate(checkInDate.getDate() + 1);
+        checkOutInput.value = newCheckOutDate.toISOString().split('T')[0];
+        updateButtonText(checkOutInput);
+      }
+    }
+
+    function updateTotalPrice() {
+      const priceRoom = {{ $hotel_room->price }};
+      const checkInInput = document.getElementById('checkIn');
+      const checkOutInput = document.getElementById('checkOut');
+
+      const checkInDate = checkInInput.value ? new Date(checkInInput.value) : null;
+      const checkOutDate = checkOutInput.value ? new Date(checkOutInput.value) : null;
+
+      let totalPrice;
+
+      if (checkInDate && checkOutDate && checkOutDate > checkInDate) {
+        const timeDifference = checkOutDate - checkInDate;
+        const numberOfNights = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        totalPrice = numberOfNights * priceRoom;
+      } else {
+        totalPrice = priceRoom;
+      }
+
+      document.querySelector('.total-price').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+    }
+
+    window.onload = () => {
+      setDefaultDates();
+      updateHiddenFields();
+      updateTotalPrice();
+    };
+  </script>
 @endpush

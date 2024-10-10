@@ -21,6 +21,11 @@ class Hotel extends Model
         'city_id'
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug'; // menggunakan slug sebagai route key
+    }
+
     public function city()
     {
         return $this->belongsTo(City::class);
@@ -38,7 +43,7 @@ class Hotel extends Model
 
     public function rooms()
     {
-        return $this->hasMany(HotelRoom::class);
+        return $this->hasMany(HotelRoom::class, 'hotel_id');
     }
 
     public function getLowestRoomPrice()

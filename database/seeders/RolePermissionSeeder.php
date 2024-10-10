@@ -21,6 +21,7 @@ class RolePermissionSeeder extends Seeder
             'manage cities',
             'manage hotels',
             'manage hotel bookings',
+            'manage hotel facilities',
             'checkout hotels',
             'view hotel bookings',
         ];
@@ -55,8 +56,8 @@ class RolePermissionSeeder extends Seeder
         // ketika udah memiliki role admin maka bikin akunnya
         $user = User::create([
             'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
-            'avatar' => 'images/dummy.png',
+            'email' => 'super@admin.com',
+            'avatar' => 'https://images.unsplash.com/photo-1640951613773-54706e06851d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHVzZXJ8ZW58MHx8MHx8fDA%3D',
             'password' => bcrypt('password'),
         ]);
 

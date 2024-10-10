@@ -17,12 +17,6 @@
               value="{{ $city->name }}" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
           </div>
-          <div class="mt-4">
-            <x-input-label for="photo" :value="__('Photo')" />
-            <x-text-input id="photo" class="block mt-1 w-full" type="file" name="photo" required autofocus
-              autocomplete="photo" />
-            <x-input-error :messages="$errors->get('photo')" class="mt-2" />
-          </div>
 
           <div class="flex items-center justify-end mt-4">
 

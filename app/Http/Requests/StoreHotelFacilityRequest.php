@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\City;
+use App\Models\HotelFacility;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreCityRequest extends FormRequest
+class StoreHotelFacilityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +23,9 @@ class StoreCityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('cities')->ignore($this->route('city')),
-            ],
-            'photo' => ['required', 'image', 'mimes:jpeg,png,jpg'],
+            'name' => ['required', 'string', 'max:255', 'unique:' . HotelFacility::class],
+            'description' => ['required', 'string', 'max:255'],
+            'icon' => ['required', 'string']
         ];
     }
 }

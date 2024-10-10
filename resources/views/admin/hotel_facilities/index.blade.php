@@ -2,9 +2,10 @@
   <x-slot name="header">
     <div class="flex flex-row justify-between items-center">
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Manage Cities') }}
+        {{ __('Manage Hotel Facilities') }}
       </h2>
-      <a href="{{ route('admin.cities.create') }}" class="font-bold py-4 px-6 bg-indigo-700 text-white rounded-full">
+      <a href="{{ route('admin.hotel_facilities.create') }}"
+        class="font-bold py-4 px-6 bg-indigo-700 text-white rounded-full">
         Add New
       </a>
     </div>
@@ -13,32 +14,35 @@
   <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10 flex flex-col gap-y-5">
-        @forelse ($cities as $city)
+        @forelse ($hotel_facilities as $facility)
           <div class="item-card flex flex-row justify-between items-center">
             <div class="flex flex-row items-center gap-x-3">
-              <img src="{{ $city->photo }}" alt="" class="rounded-2xl object-cover w-[120px] h-[90px]">
+              <div class="flex flex-col">
+                <p class="text-slate-500 text-sm">Icon</p>
+                <i class="fa-solid {{ $facility->icon }} fa-lg"></i>
+              </div>
             </div>
             <div class="flex flex-row items-center gap-x-3">
               <div class="flex flex-col">
                 <p class="text-slate-500 text-sm">Name</p>
                 <h3 class="text-indigo-950 text-xl font-bold">
-                  {{ $city->name }}
+                  {{ $facility->name }}
                 </h3>
               </div>
             </div>
             <div class="hidden md:flex flex-col">
-              <p class="text-slate-500 text-sm">Date</p>
+              <p class="text-slate-500 text-sm">Description</p>
               <h3 class="text-indigo-950 text-xl font-bold">
-                {{ $city->created_at->format('M d, Y') }}
+                {{ $facility->description }}
               </h3>
             </div>
             <div class="hidden md:flex flex-row items-center gap-x-3">
               {{-- lihat parameter di controller edit --}}
-              <a href="{{ route('admin.cities.edit', $city) }}"
+              <a href="{{ route('admin.hotel_facilities.edit', $facility) }}"
                 class="font-bold py-4 px-6 bg-indigo-700 text-white rounded-full">
                 Edit
               </a>
-              <form action="{{ route('admin.cities.destroy', $city) }}" method="POST">
+              <form action="{{ route('admin.hotel_facilities.destroy', $facility) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="font-bold py-4 px-6 bg-red-700 text-white rounded-full">
@@ -50,7 +54,6 @@
         @empty
           <p>belum ada data terbaru</p>
         @endforelse
-        {{ $cities->links() }}
       </div>
     </div>
   </div>

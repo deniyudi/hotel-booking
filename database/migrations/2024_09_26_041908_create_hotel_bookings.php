@@ -18,8 +18,9 @@ return new class extends Migration
             $table->date('checkout_at');
             $table->unsignedBigInteger('total_days');
             $table->unsignedBigInteger('total_amount');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
+            $table->foreignId('hotel_room_id')->constrained('hotel_rooms')->onDelete('cascade');
             $table->boolean('is_paid');
             $table->softDeletes();
             $table->timestamps();

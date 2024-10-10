@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('hotel_rooms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('photo');
             $table->unsignedBigInteger('price');
             $table->unsignedBigInteger('total_people');
-            $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
+            $table->foreignId('hotel_id')->constrained('hotels')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

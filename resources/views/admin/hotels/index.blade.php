@@ -17,8 +17,7 @@
         @forelse ($hotels as $hotel)
           <div class="item-card flex flex-row justify-between items-center">
             <div class="flex flex-row items-center gap-x-3">
-              <img src="{{ Storage::url($hotel->thumbnail) }}" alt=""
-                class="rounded-2xl object-cover w-[120px] h-[90px]">
+              <img src="{{ $hotel->thumbnail }}" alt="" class="rounded-2xl object-cover w-[120px] h-[90px]">
               <div class="flex flex-col">
                 <h3 class="text-indigo-950 text-xl font-bold">
                   {{ $hotel->name }}

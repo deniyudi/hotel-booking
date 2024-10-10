@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Helper;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -40,9 +41,15 @@ class RegisteredUserController extends Controller
             $avatarPath = $request->file('avatar')->store('avatars', 'public');
         }
 
+        $file = $request->file('avatar');
+        $namePath = 'avatar';
+
+        // Menggunakan helper untuk upload ke Cloudinary
+        $upload = Helper::uploadToCloudinary($file, $namePath);
+
         $user = User::create([
             'name' => $request->name,
-            'avatar' => $avatarPath,
+            'avatar' => $upload,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -53,6 +60,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('frontend.index');
     }
 }

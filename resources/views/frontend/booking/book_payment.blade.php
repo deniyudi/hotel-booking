@@ -1,13 +1,17 @@
 @extends('../layouts/main')
 
 @section('content')
+  @php
+    $hotelBookingData = session('hotel_booking_data');
+  @endphp
+
   <section id="content"
     class="max-w-[640px] w-full min-h-screen mx-auto flex flex-col bg-[#F8F8F8] overflow-x-hidden pb-[120px] relative">
     <div class="w-full h-[184px] absolute top-0 bg-[linear-gradient(244.6deg,_#7545FB_14.17%,_#2A3FCC_92.43%)]">
     </div>
     <div class="relative z-10 flex flex-col gap-6 mt-[60px]">
       <div class="top-menu flex justify-between items-center px-[18px]">
-        <a href="hotel-rooms-type.html" class="">
+        <a href="{{ url()->previous() }}" class="">
           <div class="w-[42px] h-[42px] flex shrink-0">
             <img src="{{ asset('assets/images/icons/back.svg') }}" alt="icon">
           </div>
@@ -16,9 +20,8 @@
         <div class="dummy-spacer w-[42px] h-[42px] flex shrink-0">
         </div>
       </div>
-      <form method="POST" enctype="multipart/form-data"
-        action="{{ route('frontend.hotel.book.payment.store', $hotel_booking) }}" id="Details"
-        class="group result-card-container flex flex-col gap-6">
+      <form method="POST" enctype="multipart/form-data" action="{{ route('frontend.hotel.book.payment.store') }}"
+        id="Details" class="group result-card-container flex flex-col gap-6">
         @method('PUT')
         @csrf
         <div id="Contact-details" class="bg-white rounded-xl overflow-hidden flex flex-col mx-[18px]">
@@ -27,7 +30,7 @@
               data-accordion="accordion-1">
               <div class="flex items-center">
                 <div class="w-12 h-12 flex shrink-0 rounded-full overflow-hidden">
-                  <img src="{{ Storage::url($user->avatar) }}" class="object-cover w-full h-full" alt="photo">
+                  <img src="{{ $user->avatar }}" class="object-cover w-full h-full" alt="photo">
                 </div>
               </div>
               <div class="flex flex-col flex-1 gap-[2px] text-left">
@@ -66,22 +69,25 @@
           <div class="flex flex-col p-4 gap-4 rounded-lg border border-[#DCDFE6]">
             <div class="flex items-center justify-between">
               <p class="font-medium text-sm leading-[21px] text-[#757C98]">Order ID:</p>
-              <p class="font-semibold text-sm leading-[21px]">{{ $hotel_booking->id }}</p>
+              <p class="font-semibold text-sm leading-[21px]">{{ $hotelBookingData['random_id'] }}</p>
             </div>
             <hr class="border-[#DCDFE6]">
+
             <div class="flex items-center gap-3">
               <div class="w-[72px] h-[72px] flex shrink-0 rounded-lg overflow-hidden">
-                <img src="{{ Storage::url($hotel_booking->room->photo) }}" class="object-cover w-full h-full"
-                  alt="thumbnail">
+                <img src="{{ $hotelBookingData['hotel_room']['photo'] }}"
+                  class="object-cover w-full h-full" alt="thumbnail">
               </div>
               <div class="flex flex-col gap-[2px]">
                 <p class="font-semibold text-sm leading-[21px] text-[#4041DA]">
-                  {{ $hotel_booking->checkin_at->format('M d') }} -
-                  {{ $hotel_booking->checkout_at->format('M d') }}
-                  ({{ $hotel_booking->total_days }} Night)</p>
-                <p class="font-semibold">{{ $hotel_booking->room->name }}</p>
+                  {{ \Carbon\Carbon::parse($hotelBookingData['checkin_at'])->format('M d') }} -
+                  {{ \Carbon\Carbon::parse($hotelBookingData['checkout_at'])->format('M d') }}
+                  ({{ $hotelBookingData['total_days'] }} Night)
+                </p>
+                <p class="font-semibold">{{ $hotelBookingData['hotel_room']['name'] }}</p>
                 <p class="font-medium text-sm leading-[21px] text-[#757C98]">Max.
-                  {{ $hotel_booking->room->total_people }} Adult /Room
+                  {{ $hotelBookingData['hotel_room']['total_people'] }}
+                  Adult /Room
                 </p>
               </div>
             </div>
@@ -105,13 +111,13 @@
             </div>
             <div class="flex items-center gap-[10px] p-[12px_16px] rounded-lg bg-[#F8F8F8]">
               <p class="copy font-semibold flex flex-1">Rp.
-                {{ number_format($hotel_booking->total_amount, 0, ',', '.') }}
-              </p>
+                {{ number_format($hotelBookingData['total_amount'], 0, ',', '.') }}
               </p>
               <button type="button" class="copy-btn font-semibold text-sm leading-[21px] text-[#4041DA]">Copy</button>
             </div>
           </div>
         </div>
+
         <div id="Pay-proof" class="bg-white rounded-xl flex flex-col mx-[18px] p-4 gap-4">
           <p class="font-semibold">Payment Proof</p>
           <div class="group flex items-center gap-6 p-[12px_16px] bg-[#F8F8F8] rounded-lg overflow-hidden">

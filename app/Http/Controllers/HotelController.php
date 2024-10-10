@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateHotelRequest;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Hotel;
+use Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -39,34 +40,35 @@ class HotelController extends Controller
      */
     public function store(StoreHotelRequest $request)
     {
-        DB::transaction(
-            function () use ($request) {
-                $validated = $request->validated();
+        DB::transaction(function () use ($request) {
+            $validated = $request->validated();
 
-                if ($request->hasFile('thumbnail')) {
-                    $thumbnailPath = $request->file('thumbnail')->store('thumbnails/' . date("Y/m/d"), 'public');
-                    $validated['thumbnail'] = $thumbnailPath;
-                }
+            // Upload thumbnail ke folder 'hotel/thumbnails/'
+            $thumbnail = $request->file('thumbnail');
+            $thumbnailPath = 'hotel/thumbnails';
+            $uploadThumbnail = Helper::uploadToCloudinary($thumbnail, $thumbnailPath);
+            $validated['thumbnail'] = $uploadThumbnail;
 
-                $validated['slug'] = Str::slug($validated['name']);
+            // Generate slug dari nama hotel
+            $validated['slug'] = Str::slug($validated['name']);
 
-                $hotel = Hotel::create($validated);
+            // Simpan data hotel ke database
+            $hotel = Hotel::create($validated);
 
-                // buat kondisi untuk menyimpan beberapa foto dari hotel tersebut
-                // 3 photo
-                // ketika udah mendapatkan 3 foto maka akan di mapping foreach disimpan 1 1
-                if ($request->file('photos')) {
-                    foreach ($request->file('photos') as $photo) {
-                        $photoPath = $photo->store('photos/' . date("Y/m/d"), 'public');
+            if ($request->hasFile('photos')) {
+                $photosPath = 'hotel/photos';
+                $uploadedPhotos = Helper::uploadMultipleFilesToCloudinary($request->file('photos'), $photosPath);
 
-                        // setelah disimpan gunakan relasi photos() untuk menyimpan ke model
-                        $hotel->photos()->create([
-                            'photo' => $photoPath
-                        ]);
-                    }
+                // Simpan setiap file photo ke database menggunakan relasi photos()
+                foreach ($uploadedPhotos as $photoUrl) {
+                    $hotel->photos()->create([
+                        'photo' => $photoUrl
+                    ]);
                 }
             }
-        );
+
+            // Cek apakah ada file photos yang diunggah
+        });
 
         return redirect()->route('admin.hotels.index');
     }
@@ -98,32 +100,51 @@ class HotelController extends Controller
      */
     public function update(UpdateHotelRequest $request, Hotel $hotel)
     {
-        DB::transaction(
-            function () use ($request, $hotel) {
-                $validated = $request->validated();
+        DB::transaction(function () use ($request, $hotel) {
+            $validated = $request->validated();
 
-                if ($request->hasFile('thumbnail')) {
-                    $thumbnailPath = $request->file('thumbnail')->store('thumbnails/' . date("Y/m/d"), 'public');
-                    $validated['thumbnail'] = $thumbnailPath;
+            $validated['slug'] = Str::slug($validated['name']);
+            // Update thumbnail jika ada file baru
+            if ($request->hasFile('thumbnail')) {
+
+                // Upload thumbnail yang baru
+                $thumbnailPath = 'hotel/thumbnails';
+                $uploadThumbnail = Helper::updateCloudinaryFile($request->file('thumbnail'), $hotel->thumbnail, $thumbnailPath);
+                $validated['thumbnail'] = $uploadThumbnail;
+            }
+
+            // Update slug
+
+            // Update hotel dengan data validasi
+            $hotel->update($validated);
+
+            // Update multiple photos
+            if ($request->file('photos')) {
+                // Loop melalui setiap foto lama dan hapus dari Cloudinary
+                foreach ($hotel->photos as $existingPhoto) {
+                    // Menggunakan Helper::updateCloudinaryFile untuk menghapus foto lama dari Cloudinary
+                    Helper::updateCloudinaryFile(null, $existingPhoto->photo, 'hotel/photos');
                 }
 
-                $validated['slug'] = Str::slug($validated['name']);
+                // Hapus semua foto lama dari database
+                $hotel->photos()->delete();
 
-                $hotel->update($validated);
-
-                if ($request->file('photos')) {
-                    foreach ($request->file('photos') as $photo) {
-                        $photoPath = $photo->store('photos/' . date("Y/m/d"), 'public');
-                        $hotel->photos()->create([
-                            'photo' => $photoPath
-                        ]);
-                    }
+                // Simpan foto baru dengan menggunakan Helper::updateCloudinaryFile
+                $photosPath = 'hotel/photos';
+                foreach ($request->file('photos') as $photo) {
+                    // Upload foto baru dan dapatkan URL secure
+                    $uploadedPhotoUrl = Helper::updateCloudinaryFile($photo, null, $photosPath);
+                    $hotel->photos()->create([
+                        'photo' => $uploadedPhotoUrl,
+                    ]);
                 }
             }
-        );
+        });
 
         return redirect()->route('admin.hotels.index');
     }
+
+
 
     /**
      * Remove the specified resource from storage.

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique(); //data tidak boleh sama
             $table->string('slug')->unique();
+            $table->string('photo');
             $table->softDeletes();
             $table->timestamps();
         });

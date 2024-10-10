@@ -28,7 +28,7 @@
 
           <div class="mt-4">
             <x-input-label for="thumbnail" :value="__('thumbnail')" />
-            <img src="{{ Storage::url($hotel->thumbnail) }}" alt=""
+            <img src="{{$hotel->thumbnail }}" alt=""
               class="rounded-2xl object-cover w-[120px] h-[90px]">
             <x-text-input id="thumbnail" class="block mt-1 w-full" type="file" name="thumbnail" autofocus
               autocomplete="thumbnail" />
@@ -86,7 +86,7 @@
           @foreach ($latestPhotos as $photo)
             <div class="mt-4">
               <x-input-label for="photo" :value="__('photo')" />
-              <img src="{{ Storage::url($photo->photo) }}" alt=""
+              <img src="{{$photo->photo }}" alt=""
                 class="rounded-2xl object-cover w-[120px] h-[90px]">
               <x-text-input id="photo" class="block mt-1 w-full" type="file" name="photos[]" autofocus
                 autocomplete="photo" />

@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCityRequest;
 use App\Models\City;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Helper;
 
 class CityController extends Controller
 {
@@ -41,7 +40,15 @@ class CityController extends Controller
         DB::transaction(function () use ($request) {
             $validated = $request->validated();
             $validated['slug'] = Str::slug($validated['name']);
-            $newCity = City::create($validated);
+
+            $file = $request->file('photo');
+            $namePath = 'city';
+
+            // Menggunakan helper untuk upload ke Cloudinary
+            $upload = Helper::uploadToCloudinary($file, $namePath);
+            $validated['photo'] = $upload;
+
+            City::create($validated);
         });
 
         return redirect()->route('admin.cities.index');
@@ -66,16 +73,36 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    private function generateFolderCloudinary($folder)
+    {
+        return 'hotelbookings/' . $folder . '/';
+    }
+
     public function update(StoreCityRequest $request, City $city)
     {
         DB::transaction(function () use ($request, $city) {
             $validated = $request->validated();
-            $validated['slug'] = Str::slug($validated['name']);
+
+            if (!isset($validated['name']) || $validated['name'] === $city->name) {
+                $validated['name'] = $city->name;
+            } else {
+                $validated['slug'] = Str::slug($validated['name']);
+            }
+
+            if ($request->hasFile('photo')) {
+                $namePath = 'city';
+
+                $newPhotoUrl = Helper::updateCloudinaryFile($request->file('photo'), $city->photo, $namePath);
+
+                $validated['photo'] = $newPhotoUrl;
+            }
+
             $city->update($validated);
         });
 
         return redirect()->route('admin.cities.index');
     }
+
 
     /**
      * Remove the specified resource from storage.
