@@ -10,7 +10,7 @@ use App\Models\City;
 use App\Models\Hotel;
 use App\Models\HotelBooking;
 use App\Models\HotelRoom;
-use Helper;
+use App\Http\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

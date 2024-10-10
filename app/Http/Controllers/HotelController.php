@@ -7,7 +7,7 @@ use App\Http\Requests\UpdateHotelRequest;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Hotel;
-use Helper;
+use App\Http\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

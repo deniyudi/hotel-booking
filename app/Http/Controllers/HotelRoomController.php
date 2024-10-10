@@ -7,7 +7,7 @@ use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Hotel;
 use App\Models\HotelFacility;
 use App\Models\HotelRoom;
-use Helper;
+use App\Http\Helpers\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

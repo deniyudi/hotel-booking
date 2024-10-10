@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Helpers;
+
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class Helper

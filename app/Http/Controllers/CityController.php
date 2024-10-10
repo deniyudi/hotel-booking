@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\Helper;
 use App\Http\Requests\StoreCityRequest;
 use App\Models\City;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Helper;
 
 class CityController extends Controller
 {
