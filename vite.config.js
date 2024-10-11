@@ -14,7 +14,7 @@ export default defineConfig({
     server: {
         host: true,
         hmr: {
-            host: 'localhost'
+            host: 'https://hotel-bookings.up.railway.app/'
         }
     },
 });
